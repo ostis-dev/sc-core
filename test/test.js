@@ -66,7 +66,7 @@ describe('ScType', function() {
 
     describe('is functions', function() {
         it('isNode', function() {
-            var node_types = [
+            const nodeTypes = [
                 ScType.Node,
                 ScType.NodeConst,
                 ScType.NodeVar,
@@ -88,7 +88,7 @@ describe('ScType', function() {
             
             for (var i = 0; i < allTypes.length; ++i) {
                 var type = allTypes[i];
-                if (node_types.indexOf(type) !== -1)
+                if (nodeTypes.indexOf(type) !== -1)
                     assert.ok(type.isNode());
                 else
                     assert.ok(!type.isNode());
@@ -96,65 +96,229 @@ describe('ScType', function() {
         });
 
         it('isEdge', function() {
-            assert.ok(ScType.EdgeUCommon.isEdge());
-            assert.ok(ScType.EdgeDCommon.isEdge());
-            assert.ok(ScType.EdgeUCommonConst.isEdge());
-            assert.ok(ScType.EdgeDCommonConst.isEdge());
-            assert.ok(ScType.EdgeUCommonVar.isEdge());
-            assert.ok(ScType.EdgeDCommonVar.isEdge());
-            assert.ok(ScType.EdgeAccess.isEdge());
-            assert.ok(ScType.EdgeAccessConstPosPerm.isEdge());
-            assert.ok(ScType.EdgeAccessConstNegPerm.isEdge());
-            assert.ok(ScType.EdgeAccessConstFuzPerm.isEdge());
-            assert.ok(ScType.EdgeAccessConstPosTemp.isEdge());
-            assert.ok(ScType.EdgeAccessConstNegTemp.isEdge());
-            assert.ok(ScType.EdgeAccessConstFuzTemp.isEdge());
-            assert.ok(ScType.EdgeAccessVarPosPerm.isEdge());
-            assert.ok(ScType.EdgeAccessVarNegPerm.isEdge());
-            assert.ok(ScType.EdgeAccessVarFuzPerm.isEdge());
-            assert.ok(ScType.EdgeAccessVarPosTemp.isEdge());
-            assert.ok(ScType.EdgeAccessVarNegTemp.isEdge());
-            assert.ok(ScType.EdgeAccessVarFuzTemp.isEdge());
+            const edgeTypes = [
+                ScType.EdgeUCommon,
+                ScType.EdgeUCommon,
+                ScType.EdgeDCommon,
+                ScType.EdgeUCommonConst,
+                ScType.EdgeDCommonConst,
+                ScType.EdgeUCommonVar,
+                ScType.EdgeDCommonVar,
+                ScType.EdgeAccess,
+                ScType.EdgeAccessConstPosPerm,
+                ScType.EdgeAccessConstNegPerm,
+                ScType.EdgeAccessConstFuzPerm,
+                ScType.EdgeAccessConstPosTemp,
+                ScType.EdgeAccessConstNegTemp,
+                ScType.EdgeAccessConstFuzTemp,
+                ScType.EdgeAccessVarPosPerm,
+                ScType.EdgeAccessVarNegPerm,
+                ScType.EdgeAccessVarFuzPerm,
+                ScType.EdgeAccessVarPosTemp,
+                ScType.EdgeAccessVarNegTemp,
+                ScType.EdgeAccessVarFuzTemp
+            ];
 
+            for (var i = 0; i < allTypes.length; ++i) {
+                var type = allTypes[i];
+                if (edgeTypes.indexOf(type) !== -1)
+                    assert.ok(type.isEdge());
+                else
+                    assert.ok(!type.isEdge());
+            }
         });
 
         it('isLink', function() {
-            assert.ok(ScType.Link.isLink());
-            assert.ok(ScType.LinkConst.isLink());
-            assert.ok(ScType.LinkVar.isLink());
+            const linkTypes = [
+                ScType.Link,
+                ScType.LinkConst,
+                ScType.LinkVar
+            ];
+            
+            for (var i = 0; i < allTypes.length; ++i) {
+                var type = allTypes[i];
+                if (linkTypes.indexOf(type) !== -1)
+                    assert.ok(type.isLink());
+                else
+                    assert.ok(!type.isLink());
+            }
         });
 
         it('isConst', function() {
-            assert.ok(ScType.NodeConst.isConst());
-            assert.ok(ScType.LinkConst.isConst());
-            assert.ok(ScType.EdgeUCommonConst.isConst());
-            assert.ok(ScType.EdgeDCommonConst.isConst());
-            assert.ok(ScType.EdgeAccessConstPosPerm.isConst());
-            assert.ok(ScType.EdgeAccessConstNegPerm.isConst());
-            assert.ok(ScType.EdgeAccessConstFuzPerm.isConst());
-            assert.ok(ScType.EdgeAccessConstPosTemp.isConst());
-            assert.ok(ScType.EdgeAccessConstNegTemp.isConst());
-            assert.ok(ScType.EdgeAccessConstFuzTemp.isConst());
+            const constTypes = [
+                ScType.Const,
+                ScType.NodeConst,
+                ScType.LinkConst,
+                ScType.NodeConstStruct,
+                ScType.NodeConstTuple,
+                ScType.NodeConstRole,
+                ScType.NodeConstNoRole,
+                ScType.NodeConstClass,
+                ScType.NodeConstAbstract,
+                ScType.NodeConstMaterial,
+                ScType.EdgeUCommonConst,
+                ScType.EdgeDCommonConst,
+                ScType.EdgeAccessConstPosPerm,
+                ScType.EdgeAccessConstNegPerm,
+                ScType.EdgeAccessConstFuzPerm,
+                ScType.EdgeAccessConstPosTemp,
+                ScType.EdgeAccessConstNegTemp,
+                ScType.EdgeAccessConstFuzTemp
+            ];
+
+            for (var i = 0; i < allTypes.length; ++i) {
+                var type = allTypes[i];
+                if (constTypes.indexOf(type) !== -1)
+                    assert.ok(type.isConst());
+                else
+                    assert.ok(!type.isConst());
+            }
         });
 
         it('isVar', function() {
-            assert.ok(ScType.NodeVar.isVar());
-            assert.ok(ScType.LinkVar.isVar());
-            assert.ok(ScType.EdgeUCommonVar.isVar());
-            assert.ok(ScType.EdgeDCommonVar.isVar());
-            assert.ok(ScType.EdgeAccessVarPosPerm.isVar());
-            assert.ok(ScType.EdgeAccessVarNegPerm.isVar());
-            assert.ok(ScType.EdgeAccessVarFuzPerm.isVar());
-            assert.ok(ScType.EdgeAccessVarPosTemp.isVar());
-            assert.ok(ScType.EdgeAccessVarNegTemp.isVar());
-            assert.ok(ScType.EdgeAccessVarFuzTemp.isVar());
+            const varTypes = [
+                ScType.Var,
+                ScType.NodeVar,
+                ScType.LinkVar,
+                ScType.NodeVarStruct,
+                ScType.NodeVarTuple,
+                ScType.NodeVarRole,
+                ScType.NodeVarNoRole,
+                ScType.NodeVarClass,
+                ScType.NodeVarAbstract,
+                ScType.NodeVarMaterial,
+                ScType.EdgeUCommonVar,
+                ScType.EdgeDCommonVar,
+                ScType.EdgeAccessVarPosPerm,
+                ScType.EdgeAccessVarNegPerm,
+                ScType.EdgeAccessVarFuzPerm,
+                ScType.EdgeAccessVarPosTemp,
+                ScType.EdgeAccessVarNegTemp,
+                ScType.EdgeAccessVarFuzTemp
+            ];
+
+            for (var i = 0; i < allTypes.length; ++i) {
+                var type = allTypes[i];
+                if (varTypes.indexOf(type) !== -1)
+                    assert.ok(type.isVar());
+                else
+                    assert.ok(!type.isVar());
+            }
         });
 
         it('isPos', function() {
-            assert.ok(ScType.EdgeAccessConstPosPerm.isPos());
-            assert.ok(ScType.EdgeAccessConstPosTemp.isPos());
-            assert.ok(ScType.EdgeAccessVarPosPerm.isPos());
-            assert.ok(ScType.EdgeAccessVarPosTemp.isPos());
+            const posTypes = [
+                ScType.EdgeAccessConstPosPerm,
+                ScType.EdgeAccessConstPosTemp,
+                ScType.EdgeAccessVarPosPerm,
+                ScType.EdgeAccessVarPosTemp
+            ];
+            
+            for (var i = 0; i < allTypes.length; ++i) {
+                var type = allTypes[i];
+                if (posTypes.indexOf(type) !== -1)
+                    assert.ok(type.isPos());
+                else if (type.isEdge())
+                    assert.ok(!type.isPos());
+            }
+        });
+
+        it('isNeg', function() {
+            const negTypes = [
+                ScType.EdgeAccessConstNegPerm,
+                ScType.EdgeAccessConstNegTemp,
+                ScType.EdgeAccessVarNegPerm,
+                ScType.EdgeAccessVarNegTemp
+            ];
+
+            for (var i = 0; i < allTypes.length; ++i) {
+                var type = allTypes[i];
+                if (negTypes.indexOf(type) !== -1)
+                    assert.ok(type.isNeg());
+                else if (type.isEdge())
+                    assert.ok(!type.isNeg());
+            }
+        });
+
+        it('isFuz', function() {
+            const fuzTypes = [
+                ScType.EdgeAccessConstFuzPerm,
+                ScType.EdgeAccessConstFuzTemp,
+                ScType.EdgeAccessVarFuzPerm,
+                ScType.EdgeAccessVarFuzTemp
+            ];
+
+            for (var i = 0; i < allTypes.length; ++i) {
+                var type = allTypes[i];
+                if (fuzTypes.indexOf(type) !== -1)
+                    assert.ok(type.isFuz());
+                else if (type.isEdge())
+                    assert.ok(!type.isFuz());
+            }
+        });
+
+        it('isPerm', function() {
+            const permTypes = [
+                ScType.EdgeAccessConstPosPerm,
+                ScType.EdgeAccessConstNegPerm,
+                ScType.EdgeAccessConstFuzPerm,
+                ScType.EdgeAccessVarPosPerm,
+                ScType.EdgeAccessVarNegPerm,
+                ScType.EdgeAccessVarFuzPerm
+            ];
+
+            for (var i = 0; i < allTypes.length; ++i) {
+                var type = allTypes[i];
+                if (permTypes.indexOf(type) !== -1)
+                    assert.ok(type.isPerm());
+                else if (type.isEdge())
+                    assert.ok(!type.isPerm());
+            }
+        });
+
+        it('isTemp', function() {
+            const tempTypes = [
+                ScType.EdgeAccessConstPosTemp,
+                ScType.EdgeAccessConstNegTemp,
+                ScType.EdgeAccessConstFuzTemp,
+                ScType.EdgeAccessVarPosTemp,
+                ScType.EdgeAccessVarNegTemp,
+                ScType.EdgeAccessVarFuzTemp
+            ];
+
+            for (var i = 0; i < allTypes.length; ++i) {
+                var type = allTypes[i];
+                if (tempTypes.indexOf(type) !== -1)
+                    assert.ok(type.isTemp());
+                else if (type.isEdge())
+                    assert.ok(!type.isTemp());
+            }
+        });
+
+        it('isAccess', function() {
+            const accessTypes = [
+                ScType.EdgeAccess,
+                ScType.EdgeAccessConstPosPerm,
+                ScType.EdgeAccessConstNegPerm,
+                ScType.EdgeAccessConstFuzPerm,
+                ScType.EdgeAccessConstPosTemp,
+                ScType.EdgeAccessConstNegTemp,
+                ScType.EdgeAccessConstFuzTemp,
+                ScType.EdgeAccessVarPosPerm,
+                ScType.EdgeAccessVarNegPerm,
+                ScType.EdgeAccessVarFuzPerm,
+                ScType.EdgeAccessVarPosTemp,
+                ScType.EdgeAccessVarNegTemp,
+                ScType.EdgeAccessVarFuzTemp
+            ];
+
+            for (var i = 0; i < allTypes.length; ++i) {
+                var type = allTypes[i];
+                if (accessTypes.indexOf(type) !== -1)
+                    assert.ok(type.isAccess());
+                else if (type.isEdge())
+                    assert.ok(!type.isAccess());
+            }
         });
     });
 });
