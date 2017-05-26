@@ -138,6 +138,18 @@ export class ScType {
         return (this._value === other._value);
     }
 
+    public merge(other: ScType) : ScType {
+        const t1 = (this._value & sc_type_element_mask);
+        const t2 = (other._value & sc_type_element_mask);
+
+        if (t1 != 0 || t2 != 0) {
+            if (t1 != t2)
+                throw "You can't merge two different syntax type";
+        }
+
+        return new ScType(this._value | other._value);
+    }
+
     static readonly EdgeUCommon = new ScType(sc_type_uedge_common);
     static readonly EdgeDCommon = new ScType(sc_type_dedge_common);
 

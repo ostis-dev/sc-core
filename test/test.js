@@ -320,5 +320,26 @@ describe('ScType', function() {
                     assert.ok(!type.isAccess());
             }
         });
+
+        it('merge', function() {
+            const nodeType = ScType.Node;
+            const newType = nodeType.merge(ScType.NodeConstTuple);
+
+            assert.ok(newType.isNode());
+            assert.ok(newType.isConst());
+            assert.ok(newType.isTuple());
+
+            assert.ok(!ScType.Node.isConst());
+            assert.ok(!ScType.Node.isTuple());
+            assert.ok(ScType.Node.isNode());
+
+            var passed = false;
+            try {
+                const newFailType = nodeType.merge(ScType.Link);
+            } catch (err) {
+                passed = true;
+            }
+            assert.ok(passed);
+        });
     });
 });
