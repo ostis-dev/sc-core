@@ -8,3 +8,8 @@ npm run build
 ```
 npm test
 ```
+
+## Changelog
+
+**v0.1.1**
+- Implement ScType
