@@ -41,13 +41,13 @@ const sc_type_edge_mask             = (sc_type_edge_access | sc_type_dedge_commo
 
 
 export class ScType {
-    protected _value: number;
+    private _value: number;
 
     constructor(v?: number) {
         this._value = v ? v : 0;
     }
 
-    public getValue() : number {
+    public get value() : number {
         return this._value;
     }
 
@@ -201,4 +201,24 @@ export class ScType {
     static readonly NodeVarClass = new ScType(sc_type_node | sc_type_var | sc_type_node_class);
     static readonly NodeVarAbstract = new ScType(sc_type_node | sc_type_var | sc_type_node_abstract);
     static readonly NodeVarMaterial = new ScType(sc_type_node | sc_type_var | sc_type_node_material);
+};
+
+export class ScAddr {
+    private _value: number;
+
+    constructor(v?: number) {
+        this._value = v ? v : 0;
+    }
+
+    public isValid() : boolean {
+        return (this._value != 0);
+    }
+
+    public get value() : number {
+        return this._value;
+    }
+
+    public equal(other: ScAddr) : boolean {
+        return (this._value === other._value);
+    }
 };

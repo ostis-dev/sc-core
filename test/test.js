@@ -2,6 +2,7 @@ var assert = require('assert');
 const types = require('../build/sc-core');
 
 const ScType = types.ScType;
+const ScAddr = types.ScAddr;
 
 describe('ScType', function() {
     const allTypes = [
@@ -58,7 +59,7 @@ describe('ScType', function() {
         });
 
         it('From value', function() {
-            const t = new ScType(types.ScType.NodeVar.getValue());
+            const t = new ScType(types.ScType.NodeVar.value);
             assert.ok(t.isValid());
             assert.ok(t.equal(ScType.NodeVar));
         });
@@ -340,6 +341,34 @@ describe('ScType', function() {
                 passed = true;
             }
             assert.ok(passed);
+        });
+    });
+});
+
+
+describe('ScAddr', function() {
+
+
+    describe('construct', function() {
+        it('Empty', function() {
+            const a = new ScAddr();
+
+            assert.ok(!a.isValid());
+            assert.ok(a.value == 0);
+        });
+        it('NonEmpty', function() {
+            const a = new ScAddr(5345);
+            assert.ok(a.isValid());
+        });
+    });
+    describe('methods', function(){
+        it('Equal', function() {
+            const a = new ScAddr(5);
+            const b = new ScAddr(6);
+            const c = new ScAddr(5);
+
+            assert.ok(a.equal(c));
+            assert.ok(!a.equal(b));
         });
     });
 });
