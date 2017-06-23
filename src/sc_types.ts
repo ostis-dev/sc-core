@@ -150,6 +150,11 @@ export class ScType {
         return new ScType(this._value | other._value);
     }
 
+    public changeConst(isConst: boolean) : ScType {
+        const v: number = this._value & ~sc_type_constancy_mask;
+        return new ScType(v | (isConst ? sc_type_const : sc_type_var));
+    }
+
     static readonly EdgeUCommon = new ScType(sc_type_uedge_common);
     static readonly EdgeDCommon = new ScType(sc_type_dedge_common);
 

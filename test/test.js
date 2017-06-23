@@ -342,6 +342,15 @@ describe('ScType', function() {
             }
             assert.ok(passed);
         });
+
+        it('changeConst', function() {
+            const nodeType = ScType.NodeConst;
+            assert.ok(nodeType.isConst());
+
+            const newType = nodeType.changeConst(false);
+            assert.ok(newType.isVar());
+            assert.ok(nodeType.isConst());
+        });
     });
 });
 
