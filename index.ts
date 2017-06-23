@@ -1,1 +1,1 @@
-export { ScType } from './src/sc_types';
+export * from './src/sc_types';
