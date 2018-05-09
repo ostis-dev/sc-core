@@ -191,6 +191,14 @@ export class ScType {
     static readonly LinkConst = new ScType(sc_type_link | sc_type_const);
     static readonly LinkVar = new ScType(sc_type_link | sc_type_var);
 
+    static readonly NodeStruct = new ScType(sc_type_node | sc_type_node_struct);
+    static readonly NodeTuple = new ScType(sc_type_node | sc_type_node_tuple);
+    static readonly NodeRole = new ScType(sc_type_node | sc_type_node_role);
+    static readonly NodeNoRole = new ScType(sc_type_node | sc_type_node_norole);
+    static readonly NodeClass = new ScType(sc_type_node | sc_type_node_class);
+    static readonly NodeAbstract = new ScType(sc_type_node | sc_type_node_abstract);
+    static readonly NodeMaterial = new ScType(sc_type_node | sc_type_node_material);
+
     static readonly NodeConstStruct = new ScType(sc_type_node | sc_type_const | sc_type_node_struct);
     static readonly NodeConstTuple = new ScType(sc_type_node | sc_type_const | sc_type_node_tuple);
     static readonly NodeConstRole = new ScType(sc_type_node | sc_type_const | sc_type_node_role);
