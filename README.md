@@ -11,6 +11,9 @@ npm test
 
 ## Changelog
 
+**v0.2.0**
+- Add `ScSet` and `ScNet` classes
+
 **v0.1.3**
 - Some ScType improvements
 
