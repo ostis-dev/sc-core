@@ -150,7 +150,7 @@ export class ScSet {
 
         const searchRes: ScTemplateSearchResult = await this._scNet.TemplateSearch(templ);
         const forCheck: ScAddr[] = searchRes.map((v: ScTemplateResult) => {
-            return v.get('_item');
+            return v.Get('_item');
         });
 
         const shouldAdd: boolean[] = await self.ShouldAppend(forCheck);
@@ -160,8 +160,8 @@ export class ScSet {
                 continue;
             }
 
-            const edge: ScAddr = searchRes[i].get('_edge');
-            const trg: ScAddr = searchRes[i].get('_item');
+            const edge: ScAddr = searchRes[i].Get('_edge');
+            const trg: ScAddr = searchRes[i].Get('_item');
  
             if (self._elements[edge.value]) {
                 throw `Element ${trg} already exist in set`; 
@@ -195,7 +195,7 @@ export class ScSet {
         if (searchRes.length == 0) {
             const genRes: ScTemplateResult = await this._scNet.TemplateGenerate(templ, {'_item': el});
             if (genRes) {
-                const edge: ScAddr = genRes.get('_item');
+                const edge: ScAddr = genRes.Get('_item');
                 result = (edge && edge.isValid());
             }
         }

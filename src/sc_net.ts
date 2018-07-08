@@ -8,6 +8,10 @@ type ScEventCallbackFunc = (elAddr: ScAddr, edge: ScAddr, other: ScAddr)=>void;
 type ScAddrList = ScAddr[];
 
 export type ScTemplateGenParams = { [id: string] : ScAddr };
+export interface ScIdtfResolveParams {
+    idtf: string,
+    type: ScType,
+};
 
 export enum ScEventType {
     Unknown = "unknown",
@@ -16,7 +20,7 @@ export enum ScEventType {
     RemoveOutgoingEdge = "remove_outgoing_edge",
     RemoveIngoingEdge = "remove_ingoing_edge",
     RemoveElement = "delete_element",
-    ChangeContent = "content_change"
+    ChangeContent = "content_change",
 }
 
 export class ScEventParams {
@@ -271,17 +275,26 @@ export class ScConstruction {
 }
 
 // Result of template search
-type ScValuesMap = { [id: string] : ScAddr };
+type ScValueIndex = { [id: string] : number };
 
 export class ScTemplateResult {
-    private _values: ScValuesMap = null;
+    private _addrs: ScAddr[] = [];
+    private _indecies: ScValueIndex = null;
 
-    constructor(values: ScValuesMap) {
-        this._values = values;
+    constructor(indecies: ScValueIndex, addrs: ScAddr[]) {
+        this._indecies = indecies;
+        this._addrs = addrs;
+    }
+    public get Size() {
+        return this._addrs.length;
     }
 
-    public get(alias: string) : ScAddr {
-        return this._values[alias];
+    public Get(aliasOrIndex: string | number) : ScAddr {
+        if (typeof aliasOrIndex === "string") {
+            return this._addrs[this._indecies[aliasOrIndex]];
+        }
+
+        return this._addrs[aliasOrIndex];
     }
 };
 
@@ -479,11 +492,22 @@ export class ScNet {
         });
     }
 
-    public async ResolveKeynodes(idtfs: string[]) : Promise<ResolveIdtfMap> {
+    public async ResolveKeynodes(params: ScIdtfResolveParams[]) : Promise<ResolveIdtfMap> {
         const self = this;
         return new Promise<ResolveIdtfMap>(function(resolve) {
-            const payload = idtfs.map((id: string) => {
-                return { command: 'find', idtf: id };
+            const payload = params.map((p: ScIdtfResolveParams) => {
+                if (p.type.isValid()) {
+                    return {
+                        command: 'resolve',
+                        idtf: p.idtf,
+                        elType: p.type.value
+                    }
+                }
+                
+                return { 
+                    command: 'find',
+                    idtf: p.idtf
+                };
             });
 
             self.sendMessage('keynodes', payload, (data: Response) => {
@@ -493,7 +517,7 @@ export class ScNet {
 
                 const result: ResolveIdtfMap = {};
                 for (let i = 0; i < addrs.length; ++i) {
-                    result[idtfs[i]] = addrs[i];
+                    result[params[i].idtf] = addrs[i];
                 }
                 resolve(result);
             });
@@ -519,19 +543,23 @@ export class ScNet {
 
     /* Search constructions by specified template
      */
-    public async TemplateSearch(templ: ScTemplate) : Promise<ScTemplateSearchResult> {
+    public async TemplateSearch(templ: ScTemplate | string) : Promise<ScTemplateSearchResult> {
         const self = this;
         return new Promise<ScTemplateSearchResult>(async function(resolve) {
-            const payload = [];
-            
-            templ.ForEachSearchTriple((triple: ScTemplateTriple) => {
-                let items: object[] = [];
-                payload.push([
-                    self.ProcessTripleItem(triple.source),
-                    self.ProcessTripleItem(triple.edge),
-                    self.ProcessTripleItem(triple.target)
-                ]);
-            });
+            let payload: any = [];
+
+            if (typeof templ === "string") {
+                payload = templ;
+            } else {
+                templ.ForEachSearchTriple((triple: ScTemplateTriple) => {
+                    let items: object[] = [];
+                    payload.push([
+                        self.ProcessTripleItem(triple.source),
+                        self.ProcessTripleItem(triple.edge),
+                        self.ProcessTripleItem(triple.target)
+                    ]);
+                });
+            }
             
             self.sendMessage('search_template', payload, (data: Response) => {
                 let result: ScTemplateSearchResult = [];
@@ -539,17 +567,13 @@ export class ScNet {
                     const aliases: any = data.payload['aliases'];
                     const addrs: number[][] = data.payload['addrs'];
 
-                    result = addrs.map((it: number[]) => {
-                        const values: ScValuesMap = {};
-                        for (let alias in aliases) {
-                            if (aliases.hasOwnProperty(alias)) {
-                                values[alias] = new ScAddr(it[aliases[alias]]);
-                            }
-                        }
-
-                        return new ScTemplateResult(values);
+                    addrs.forEach((addrsItem: number[]) => {
+                        let resultAddrsItem: ScAddr[] = [];
+                        addrsItem.forEach((a: number) => {
+                            resultAddrsItem.push(new ScAddr(a));
+                        });
+                        result.push(new ScTemplateResult(aliases, resultAddrsItem));
                     });
-                    
                 }
 
                 resolve(result);
@@ -559,37 +583,44 @@ export class ScNet {
 
     /* Search constructions by specified template
      */
-    public async TemplateGenerate(templ: ScTemplate, params: ScTemplateGenParams) : Promise<ScTemplateResult> {
+    public async TemplateGenerate(templ: ScTemplate | string, params: ScTemplateGenParams) : Promise<ScTemplateResult> {
         const self = this;
         return new Promise<ScTemplateResult>(async function(resolve) {
-            const templTriples = [];
-            templ.ForEachSearchTriple((triple: ScTemplateTriple) => {
-                let items: object[] = [];
+            let templData: any = [];
 
-                templTriples.push([
-                    self.ProcessTripleItem(triple.source),
-                    self.ProcessTripleItem(triple.edge),
-                    self.ProcessTripleItem(triple.target)
-                ]);
-            });
+            if (typeof templ === "string") {
+                templData = templ;
+            } else {
+                templ.ForEachSearchTriple((triple: ScTemplateTriple) => {
+                    let items: object[] = [];
+
+                    templData.push([
+                        self.ProcessTripleItem(triple.source),
+                        self.ProcessTripleItem(triple.edge),
+                        self.ProcessTripleItem(triple.target)
+                    ]);
+                });
+            }
             const jsonParams = {}
             for (let key in params) {
                 if (params.hasOwnProperty(key)) {
                     jsonParams[key] = params[key].value;
                 }
             }
-            const payload = { templ: templTriples, params: jsonParams };
+            const payload = { templ: templData, params: jsonParams };
 
             self.sendMessage('generate_template', payload, (data: Response) => {
                 
                 if (data.status) {
-                    const result: ScValuesMap = {};
-                    for (let alias in data.payload) {
-                        if (data.payload.hasOwnProperty(alias)) {
-                            result[alias] = new ScAddr(data.payload[alias]);
-                        }
-                    }
-                    resolve(new ScTemplateResult(result));
+                    const aliases: any = data.payload['aliases'];
+                    const addrs: number[] = data.payload['addrs'];
+
+                    let resultAddrs: ScAddr[] = [];
+                    addrs.forEach((a: number) => {
+                        resultAddrs.push(new ScAddr(a));
+                    });
+
+                    resolve(new ScTemplateResult(aliases, resultAddrs));
                 }
 
                 resolve(null);
