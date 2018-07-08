@@ -1,6 +1,6 @@
 {
   "name": "@ostis/sc-core",
-  "version": "0.2.1",
+  "version": "0.2.3",
   "description": "Core library to work with sc-memory from web browser",
   "main": "build/sc-core.js",
   "scripts": {
