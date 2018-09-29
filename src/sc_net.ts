@@ -276,6 +276,7 @@ export class ScConstruction {
 
 // Result of template search
 type ScValueIndex = { [id: string] : number };
+type ScTripleCallback = (src: ScAddr, edge: ScAddr, trg: ScAddr) => void;
 
 export class ScTemplateResult {
     private _addrs: ScAddr[] = [];
@@ -285,7 +286,7 @@ export class ScTemplateResult {
         this._indecies = indecies;
         this._addrs = addrs;
     }
-    public get Size() {
+    public get size() {
         return this._addrs.length;
     }
 
@@ -295,6 +296,12 @@ export class ScTemplateResult {
         }
 
         return this._addrs[aliasOrIndex];
+    }
+
+    public ForEachTriple(func: ScTripleCallback) {
+        for (let i = 0; i < this.size; i += 3) {
+            func(this._addrs[i], this._addrs[i + 1], this._addrs[i + 2]);
+        }
     }
 };
 
