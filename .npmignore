@@ -1,5 +1,7 @@
 node_modules/
 test/
+src/
+
 .gitignore
 tsconfig.json
-wabpack.config.js
+webpack.*
