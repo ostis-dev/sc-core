@@ -10,6 +10,10 @@ npm test
 ```
 
 ## Changelog
+
+**v.0.3.x**
+  - Update project structure
+  
 **v0.2.x**
   - Support triples in template results
   - Support scs templates with `ScNet`
